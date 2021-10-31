@@ -18,7 +18,8 @@ export default class MySQL {
   }
 
   createConn () {
-    Logger.log('\n\nMySQL is going to connect...')
+    Logger.log('')
+    Logger.log('MySQL is going to connect...')
     Logger.log(`Host:     ${this.connInfo.host}`)
     Logger.log(`User:     ${this.connInfo.user}`)
     return mysql.createConnection(this.connInfo)

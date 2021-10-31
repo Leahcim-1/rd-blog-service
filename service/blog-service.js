@@ -35,6 +35,16 @@ export default class BlogService {
         record.res.length !== 0
   }
 
+  async checkExistedTitle (title) {
+    // * Check existed ID
+    const condition = this.sql.createColumnValueCondition('title', title)
+    const record = await this.getBlogByCondition(condition)
+    return record &&
+        record.errno === ERRNO.OK &&
+        record.res.length !== 0
+  }
+
+
   async checkNonExistedId (id) {
     // * Check non-existed ID
     const condition = this.sql.createColumnValueCondition('id', id)
@@ -65,19 +75,55 @@ export default class BlogService {
     return await this.getBlogByCondition(condition, fields)
   }
 
-  async postBlog (id, data) {
-    // * Check Blog Existed
-    const existed = await this.checkExistedId(id)
-    if (existed) return this.createRes(ERRNO.DUPID)
+  async postBlog (data) {
+    const {
+      title,
+      subtitle,
+      author_id,
+      tags,
+      body,
+    } = data
 
-    const fn = async () => await this.sql.insertStatement(this.schema, this.table, data)
+    // * Check Blog title Existed
+    const existed = await this.checkExistedTitle(title)
+    if (existed) return this.createRes(ERRNO.DUPTITLE)
+
+    
+    // * Created Time 
+    const created_time = (new Date()).getTime()
+  
+    const updated_time = created_time
+
+    const fn = async () => await this.sql.insertStatement(this.schema, this.table, {
+      title,
+      subtitle,
+      author_id,
+      body,
+      created_time,
+      updated_time,
+    })
     return await this.executeWithTry(fn, false)
   }
 
   async updateBlog (id, data = {}) {
+
+    const { title = '' } = data
+
     // * Check Blog Existed
     const nonExisted = await this.checkNonExistedId(id)
     if (nonExisted) return this.createRes(ERRNO.NOEXIST)
+
+    console.log(title)
+
+    // * Check Blog title Existed
+    if (title) {
+      const existed = await this.checkExistedTitle(title)
+      if (existed) return this.createRes(ERRNO.DUPTITLE)
+    }
+
+    const updated_time = (new Date()).getTime()
+
+    data['updated_time'] = updated_time
 
     // execute PUT
     const condition = this.sql.createColumnValueCondition('id', id)
@@ -94,7 +140,7 @@ export default class BlogService {
     // * Check Blog Non-existed
     const nonExisted = await this.checkNonExistedId(id)
     if (nonExisted) return this.createRes(ERRNO.NOEXIST)
-
+    
     const condition = this.sql.createColumnValueCondition('id', id)
     const fn = async () => await this.sql.deleteStatement(
       this.schema,

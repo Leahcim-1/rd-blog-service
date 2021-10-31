@@ -40,7 +40,7 @@ app.use(router.allowedMethods())
 app.listen(PORT, HOST, () => {
   console.log('\n')
   console.log('-'.repeat(50))
-  console.log('\nUser Service')
+  console.log('\nBlog Service')
   console.log('\nThis is Bender, the bending machine.\n')
   console.log(`Your damn server is starting at http://${HOST}:${PORT}\n`)
   console.log('-'.repeat(50))

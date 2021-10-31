@@ -16,13 +16,13 @@ const paginationMiddleware = async (ctx, next) => {
   if (!body) return
 
   const { links } = body
-  if (!links || links.length == 0) return
+  if (!links || links.length === 0) return
 
   const cur = links.filter(l => l.rel === 'cur')
   if (cur.length === 0) return
 
   const query = cur[0].link.split('?')
-  if (!query || query.length < 2) return 
+  if (!query || query.length < 2) return
 
   const api = query[0]
   const queryString = query[1]
@@ -32,15 +32,16 @@ const paginationMiddleware = async (ctx, next) => {
   const limit = parseInt(limitStr, 10)
   const offset = parseInt(offsetStr, 10)
 
-  if (offset - limit >= 0) 
+  if (offset - limit >= 0) {
     links.push({
       rel: 'prev',
-      link: `${api}?limit=${limit}&offset=${ offset - limit }`
+      link: `${api}?limit=${limit}&offset=${offset - limit}`
     })
+  }
 
   links.push({
     rel: 'next',
-    link: `${api}?limit=${limit}&offset=${ offset + limit }`
+    link: `${api}?limit=${limit}&offset=${offset + limit}`
   })
 
   body.links = links
@@ -51,5 +52,5 @@ const paginationMiddleware = async (ctx, next) => {
 export {
   bodyMiddleware,
   paginationMiddleware,
-  qsMiddleware,
+  qsMiddleware
 }
