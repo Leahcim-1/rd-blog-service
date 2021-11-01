@@ -1,5 +1,6 @@
 import BodyParser from 'koa-body'
 import qs from 'qs'
+import cors from '@koa/cors';
 
 const qsMiddleware = async (ctx, next) => {
   const { querystring } = ctx.request
@@ -8,6 +9,8 @@ const qsMiddleware = async (ctx, next) => {
 }
 
 const bodyMiddleware = BodyParser()
+
+const corsMiddleware = cors()
 
 const paginationMiddleware = async (ctx, next) => {
   await next()
@@ -52,5 +55,6 @@ const paginationMiddleware = async (ctx, next) => {
 export {
   bodyMiddleware,
   paginationMiddleware,
-  qsMiddleware
+  qsMiddleware,
+  corsMiddleware
 }

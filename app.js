@@ -4,6 +4,7 @@ import {
   bodyMiddleware,
   qsMiddleware,
   paginationMiddleware,
+  corsMiddleware,
   requestInterceptor,
   responseInterceptor
 } from './middleware/index.js'
@@ -22,6 +23,9 @@ app.use(requestInterceptor)
 
 // Query String Parsing
 app.use(qsMiddleware)
+
+// CORS
+app.use(corsMiddleware)
 
 // Pose Body Parsing
 app.use(bodyMiddleware)

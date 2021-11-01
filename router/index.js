@@ -99,7 +99,8 @@ router.post('/api/blogs', async ({ request, response }) => {
   const {
     title = '',
     subtitle = '',
-    author_id,
+    author_id = '',
+    author_name = '',
     tags = [],
     body = ''
   } = request.body
@@ -107,6 +108,7 @@ router.post('/api/blogs', async ({ request, response }) => {
   if (!title ||
     !subtitle ||
     !author_id ||
+    !author_name,
     !body) {
     response.status = 400
     response.body = createResBody(ERRNO.BADPARAMS)
@@ -117,6 +119,7 @@ router.post('/api/blogs', async ({ request, response }) => {
     title,
     subtitle,
     author_id,
+    author_name,
     tags,
     body
   })

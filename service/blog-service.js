@@ -80,6 +80,7 @@ export default class BlogService {
       title,
       subtitle,
       author_id,
+      author_name,
       tags,
       body,
     } = data
@@ -98,6 +99,7 @@ export default class BlogService {
       title,
       subtitle,
       author_id,
+      author_name,
       body,
       created_time,
       updated_time,
